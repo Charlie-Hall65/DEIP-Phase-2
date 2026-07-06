@@ -1,0 +1,758 @@
+{
+  "datasets": [
+    {
+      "name": "8cfe9c1a",
+      "displayName": "movies_data",
+      "config": {
+        "version": "1.1",
+        "source": "dbacademy.default.movies_data",
+        "dimensions": [
+          {
+            "name": "MOVIES",
+            "expr": "source.MOVIES",
+            "displayName": "MOVIES"
+          },
+          {
+            "name": "YEAR",
+            "expr": "source.YEAR",
+            "displayName": "YEAR"
+          },
+          {
+            "name": "GENRE",
+            "expr": "source.GENRE",
+            "displayName": "GENRE"
+          },
+          {
+            "name": "RATING",
+            "expr": "source.RATING",
+            "displayName": "RATING"
+          },
+          {
+            "name": "ONE-LINE",
+            "expr": "source.`ONE-LINE`",
+            "displayName": "ONE LINE"
+          },
+          {
+            "name": "STARS",
+            "expr": "source.STARS",
+            "displayName": "STARS"
+          },
+          {
+            "name": "VOTES",
+            "expr": "source.VOTES",
+            "displayName": "VOTES"
+          },
+          {
+            "name": "RunTime",
+            "expr": "source.RunTime",
+            "displayName": "Run Time"
+          },
+          {
+            "name": "Gross",
+            "expr": "source.Gross",
+            "displayName": "Gross"
+          },
+          {
+            "name": "Extract_date",
+            "expr": "source.Extract_date",
+            "displayName": "Extract Date"
+          },
+          {
+            "name": "owner_company",
+            "expr": "source.owner_company",
+            "displayName": "Owner Company"
+          },
+          {
+            "name": "nr_of_episodes",
+            "expr": "source.nr_of_episodes",
+            "displayName": "Nr Of Episodes"
+          }
+        ],
+        "measures": [
+          {
+            "name": "count",
+            "expr": "COUNT(*)",
+            "comment": "Represents the total number of rows in the dataset. Use this measure to count all",
+            "displayName": "Count"
+          }
+        ]
+      }
+    },
+    {
+      "name": "7b044e63",
+      "displayName": "Untitled dataset",
+      "queryLines": [
+        ""
+      ]
+    },
+    {
+      "name": "d31fe3cc",
+      "displayName": "movies_cleaned",
+      "config": {
+        "version": "1.1",
+        "source": "dbacademy.default.movies_cleaned",
+        "dimensions": [
+          {
+            "name": "MOVIES",
+            "expr": "source.MOVIES",
+            "displayName": "MOVIES"
+          },
+          {
+            "name": "GENRE",
+            "expr": "source.GENRE",
+            "displayName": "GENRE"
+          },
+          {
+            "name": "RATING",
+            "expr": "source.RATING",
+            "displayName": "RATING"
+          },
+          {
+            "name": "ONE-LINE",
+            "expr": "source.`ONE-LINE`",
+            "displayName": "ONE LINE"
+          },
+          {
+            "name": "VOTES",
+            "expr": "source.VOTES",
+            "displayName": "VOTES"
+          },
+          {
+            "name": "RunTime",
+            "expr": "source.RunTime",
+            "displayName": "Run Time"
+          },
+          {
+            "name": "Gross",
+            "expr": "source.Gross",
+            "displayName": "Gross"
+          },
+          {
+            "name": "owner_company",
+            "expr": "source.owner_company",
+            "displayName": "Owner Company"
+          },
+          {
+            "name": "nr_of_episodes",
+            "expr": "source.nr_of_episodes",
+            "displayName": "Nr Of Episodes"
+          },
+          {
+            "name": "Director",
+            "expr": "source.Director",
+            "displayName": "Director"
+          },
+          {
+            "name": "Stars",
+            "expr": "source.Stars",
+            "displayName": "Stars"
+          },
+          {
+            "name": "extraction_date",
+            "expr": "source.extraction_date",
+            "displayName": "Extraction Date"
+          },
+          {
+            "name": "extraction_time",
+            "expr": "source.extraction_time",
+            "displayName": "Extraction Time"
+          },
+          {
+            "name": "start_year",
+            "expr": "source.start_year",
+            "displayName": "Start Year"
+          },
+          {
+            "name": "end_year",
+            "expr": "source.end_year",
+            "displayName": "End Year"
+          },
+          {
+            "name": "lasted",
+            "expr": "source.lasted",
+            "displayName": "Lasted"
+          }
+        ],
+        "measures": [
+          {
+            "name": "count",
+            "expr": "COUNT(*)",
+            "comment": "Represents the total number of rows in the dataset. Use this measure to count all",
+            "displayName": "Count"
+          }
+        ]
+      }
+    },
+    {
+      "name": "de3cda85",
+      "displayName": "Movies Cleaned Data Overview Summary",
+      "queryLines": [
+        "\n",
+        "  SELECT\n",
+        "  rating,\n",
+        "  ROUND(AVG(\n",
+        "    CASE \n",
+        "      WHEN lasted = 'present' THEN YEAR(CURRENT_DATE()) - CAST(start_year AS INT)\n",
+        "      ELSE TRY_CAST(lasted AS DOUBLE)\n",
+        "    END\n",
+        "  ), 2) as avg_lasted\n",
+        "FROM\n",
+        "  dbacademy.default.movies_cleaned\n",
+        "WHERE\n",
+        "  rating IS NOT NULL\n",
+        "  AND lasted IS NOT NULL\n",
+        "  AND lasted != ''\n",
+        "  AND (lasted = 'present' OR TRY_CAST(lasted AS DOUBLE) IS NOT NULL)\n",
+        "GROUP BY\n",
+        "  rating"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "9289da39",
+      "displayName": "Movies Dashboard",
+      "layout": [
+        {
+          "widget": {
+            "name": "65871612",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "d31fe3cc",
+                  "fields": [
+                    {
+                      "name": "RATING",
+                      "expression": "`RATING`"
+                    },
+                    {
+                      "name": "measure(count)",
+                      "expression": "MEASURE(`count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "mark": {
+                "colors": [
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 2
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 4
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 5
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 6
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 7
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 8
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 9
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 10
+                  }
+                ]
+              },
+              "frame": {
+                "title": "Movie Ratings Distribution",
+                "showTitle": true
+              },
+              "widgetType": "histogram",
+              "encodings": {
+                "x": {
+                  "fieldName": "RATING",
+                  "displayName": "Movie Rating (0.0-10.0)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(count)",
+                  "displayName": "Movie Rating Frequency",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "label": {
+                  "show": false
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 6,
+            "width": 9,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "runtime-and",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "de3cda85",
+                  "fields": [
+                    {
+                      "name": "rating",
+                      "expression": "`rating`"
+                    },
+                    {
+                      "name": "avg_lasted",
+                      "expression": "`avg_lasted`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "showTitle": true,
+                "title": "Runtime and Rating have No Direct Correlation"
+              },
+              "mark": {
+                "colors": [
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 6
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 2
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 4
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 5
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 6
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 7
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 8
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 9
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 10
+                  }
+                ],
+                "shape": "diamond",
+                "size": 0.1
+              },
+              "widgetType": "scatter",
+              "encodings": {
+                "x": {
+                  "fieldName": "rating",
+                  "displayName": "Average Rating (0-10)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "avg_lasted",
+                  "displayName": "Average Time Lasted (in Years)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 12,
+            "width": 8,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "07247197",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "d31fe3cc",
+                  "fields": [
+                    {
+                      "name": "measure(count)",
+                      "expression": "MEASURE(`count`)"
+                    },
+                    {
+                      "name": "owner_company",
+                      "expression": "`owner_company`"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "`owner_company` IS NOT NULL"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Movies by Owner Company: No Dominant Force",
+                "showTitle": true
+              },
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "measure(count)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Percentage of Movies Backed"
+                },
+                "color": {
+                  "fieldName": "owner_company",
+                  "legend": {
+                    "hideTitle": true,
+                    "hide": false,
+                    "position": "right"
+                  },
+                  "displayName": "Owner Company",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "natural-order-reversed"
+                    }
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 0,
+            "width": 8,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "e50282f5",
+            "queries": [
+              {
+                "name": "dashboards/01f174b29f171ae0b1238d0460c920a5/datasets/01f175795e651301bea61c42e354ed8a_rating",
+                "query": {
+                  "datasetName": "de3cda85",
+                  "fields": [
+                    {
+                      "name": "min(rating)",
+                      "expression": "MIN(`rating`)"
+                    },
+                    {
+                      "name": "max(rating)",
+                      "expression": "MAX(`rating`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Filter by Rating"
+              },
+              "widgetType": "range-slider",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "rating",
+                    "queryName": "dashboards/01f174b29f171ae0b1238d0460c920a5/datasets/01f175795e651301bea61c42e354ed8a_rating"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 12,
+            "width": 4,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "664fc872",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<div style=\"display: flex; align-items: center; gap: 12px;\"><br><br><span style=\"font-size:24px;font-family:Orbitron;color:#FDB515\">Runtime and Rating have No Direct Correlation</span><br></div>"
+              ]
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 14,
+            "width": 4,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "39597809",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<div style=\"display: flex; align-items: center; gap: 12px;\"><br><span style=\"font-size:24px;font-family:Orbitron;color:#FDB515\">The majority of Movies end up being rated between 6.0 and 8.0</span>\n",
+                "<p>&nbsp;</p>\n"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 6,
+            "width": 3,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "78312a97",
+            "queries": [
+              {
+                "name": "dashboards/01f174b29f171ae0b1238d0460c920a5/datasets/01f1757373861f02bb75fb8adc7209ae_GENRE",
+                "query": {
+                  "datasetName": "d31fe3cc",
+                  "fields": [
+                    {
+                      "name": "GENRE",
+                      "expression": "`GENRE`"
+                    },
+                    {
+                      "name": "GENRE_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Filter by Genre"
+              },
+              "scale": {
+                "type": "categorical",
+                "sort": {
+                  "by": "natural-order"
+                }
+              },
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "GENRE",
+                    "queryName": "dashboards/01f174b29f171ae0b1238d0460c920a5/datasets/01f1757373861f02bb75fb8adc7209ae_GENRE"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 10,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "73dedd1f",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"text-align:center\"><div style=\"display: flex; align-items: center; justify-content: center; height: 100%;\"><br>\n",
+                "\n",
+                "<span style=\"text-align:center\"><span style=\"font-size:32px;font-family:Orbitron;color:#FDB515\">DEIP Databricks POC:</span><br><span style=\"font-size:32px;font-family:Orbitron;color:#FDB515\">An Analytic Overview of Movies Data</span><br></div></span>"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 4,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "56e8d5b7",
+      "displayName": "Global Filters",
+      "pageType": "PAGE_TYPE_GLOBAL_FILTERS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "canvasBackgroundColor": {
+        "light": "#003262",
+        "dark": "#003262"
+      },
+      "widgetBackgroundColor": {
+        "light": "#1A1D23",
+        "dark": "#1A1D23"
+      },
+      "widgetBorderColor": {
+        "light": "#FDB515",
+        "dark": "#FDB515"
+      },
+      "fontColor": {
+        "light": "#FFFFFF",
+        "dark": "#FFFFFF"
+      },
+      "selectionColor": {
+        "light": "#FDB515",
+        "dark": "#FDB515"
+      },
+      "visualizationColors": [
+        "#003262",
+        "#FDB515",
+        "#3B7EA1",
+        "#C4820E",
+        "#00B0DA",
+        "#EE1F60",
+        "#6C3302",
+        "#859438",
+        "#D9661F",
+        "#00A598"
+      ],
+      "widgetHeaderAlignment": "LEFT",
+      "fontFamily": "Roboto",
+      "widgetPadding": 8,
+      "widgetMargin": 4,
+      "widgetCornerRadius": 4,
+      "widgetShadow": 0,
+      "continuousGradient": {
+        "lightMode": {
+          "fromCategoricalIndex": 0
+        },
+        "darkMode": {
+          "fromCategoricalIndex": 0
+        }
+      },
+      "fontSettings": {
+        "base": {
+          "fontFamily": "Roboto",
+          "fontColor": {
+            "light": "#FFFFFF",
+            "dark": "#FFFFFF"
+          },
+          "fontSize": 14,
+          "fontWeight": 400
+        },
+        "widgetTitle": {
+          "fontFamily": "Roboto",
+          "fontColor": {
+            "light": "#FDB515",
+            "dark": "#FDB515"
+          },
+          "fontSize": 18,
+          "fontWeight": 700
+        },
+        "widgetDescription": {
+          "fontSize": 12,
+          "fontWeight": 400
+        },
+        "fieldTitle": {
+          "fontFamily": "Roboto",
+          "textCase": "TEXT_CASE_UPPERCASE",
+          "fontColor": {
+            "light": "#FFFFFF",
+            "dark": "#FFFFFF"
+          },
+          "fontSize": 12,
+          "fontWeight": 500
+        },
+        "fieldValue": {
+          "fontFamily": "Roboto",
+          "fontColor": {
+            "light": "#FFFFFF",
+            "dark": "#FFFFFF"
+          },
+          "fontSize": 14,
+          "fontWeight": 400
+        }
+      },
+      "gridLineColor": {
+        "light": "#8A96A3",
+        "dark": "#8A96A3"
+      },
+      "axisLineColor": {
+        "light": "#FFFFFF",
+        "dark": "#FFFFFF"
+      }
+    },
+    "applyModeEnabled": false
+  }
+}
